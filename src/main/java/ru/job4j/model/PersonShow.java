@@ -1,19 +1,25 @@
-package ru.job4j.domain;
+package ru.job4j.model;
 
-import javax.persistence.*;
+import ru.job4j.domain.Person;
+
 import java.util.Objects;
 
-@Entity(name = "person")
-public class Person {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PersonShow {
+
     private int id;
     private String login;
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    public static PersonShow toPersonShow(Person person) {
+        PersonShow personShow = new PersonShow();
+        personShow.setId(person.getId());
+        personShow.setLogin(person.getLogin());
+        personShow.setPassword(person.getPassword());
+        return personShow;
+    }
+
+    public PersonShow() {
+    }
 
     public int getId() {
         return id;
@@ -39,14 +45,6 @@ public class Person {
         this.password = password;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -55,12 +53,12 @@ public class Person {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Person person = (Person) o;
-        return id == person.id && Objects.equals(login, person.login) && Objects.equals(password, person.password) && Objects.equals(employee, person.employee);
+        PersonShow that = (PersonShow) o;
+        return id == that.id && Objects.equals(login, that.login) && Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, employee);
+        return Objects.hash(id, login, password);
     }
 }
